@@ -11,7 +11,8 @@ class Tyoskentelijat(sc2.BotAI):
         await self.rakenna_spawningpool()
 
     async def rakenna_spawningpool(self):
-        if (self.can_afford(UnitTypeId.SPAWNINGPOOL) and not self.already_pending(UnitTypeId.SPAWNINGPOOL)):
+        spawningpool_puuttuu = len(self.units.of_type(UnitTypeId.SPAWNINGPOOL)) <= 0
+        if (spawningpool_puuttuu and self.can_afford(UnitTypeId.SPAWNINGPOOL) and not self.already_pending(UnitTypeId.SPAWNINGPOOL)):
             await self.chat_send('Rakennetaan spawning pool!')
             await self.build(UnitTypeId.SPAWNINGPOOL, self.start_location, max_distance=20)
 
