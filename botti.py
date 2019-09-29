@@ -10,6 +10,7 @@ class Tyoskentelijat(sc2.BotAI):
         await self.distribute_workers()
         await self.rakenna_spawningpool()
         await self.rakenna_extractor()
+        await self.morphaa_overlordeja()
 
     async def rakenna_spawningpool(self):
         spawningpool_puuttuu = len(self.units.of_type(UnitTypeId.SPAWNINGPOOL)) <= 0
@@ -24,6 +25,14 @@ class Tyoskentelijat(sc2.BotAI):
             await self.chat_send('Rakennetaan extractori!')
             rakentaja = self.workers.random
             await self.do(rakentaja.build(UnitTypeId.EXTRACTOR, lahin_geyseri))
+
+    async def morphaa_overlordeja(self):
+        liian_vahan_overlordeja = len(self.units.of_type(UnitTypeId.OVERLORD)) < 3
+        if (liian_vahan_overlordeja and self.can_afford(UnitTypeId.OVERLORD) and not self.already_pending(UnitTypeId.OVERLORD)):
+            await self.chat_send('Morphataan overlordeja!')
+            rakentaja = self.workers.first
+            rakentaja.train()
+        
 
 run_game(maps.get("Triton LE"), [
     Bot(Race.Zerg, Tyoskentelijat()),
