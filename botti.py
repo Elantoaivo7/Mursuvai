@@ -20,7 +20,7 @@ class Tyoskentelijat(sc2.BotAI):
     async def rakenna_extractor(self, iteration):
         extractor_puuttuu = len(self.units.of_type(UnitTypeId.EXTRACTOR)) <= 0
         if (not self.state.vespene_geyser.empty and extractor_puuttuu and self.can_afford(UnitTypeId.EXTRACTOR) and not self.already_pending(UnitTypeId.EXTRACTOR)):
-            lahin_geyseri = self.state.vespene_geyser.first
+            lahin_geyseri = self.state.vespene_geyser.closest_to(self.start_location)
             await self.chat_send('Rakennetaan extractori!')
             rakentaja = self.workers.random
             await self.do(rakentaja.build(UnitTypeId.EXTRACTOR, lahin_geyseri))
