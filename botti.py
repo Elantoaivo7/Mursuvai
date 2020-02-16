@@ -10,7 +10,7 @@ class Tyoskentelijat(sc2.BotAI):
             await self.chat_send('Mursut tulevat')
         await self.distribute_workers()
         await self.rakenna_spawningpool()
-        await self.rakenna_extractor()
+        await self.rakenna_extractoreja()
         await self.morphaa_overlordeja()
 
     async def rakenna_spawningpool(self):
@@ -19,13 +19,14 @@ class Tyoskentelijat(sc2.BotAI):
             await self.chat_send('Rakennetaan spawning pool!')
             await self.build(UnitTypeId.SPAWNINGPOOL, self.start_location, max_distance=20)
 
-    async def rakenna_extractor(self):
-        extractor_puuttuu = len(self.units.of_type(UnitTypeId.EXTRACTOR)) <= 0
-        if (not self.state.vespene_geyser.empty and extractor_puuttuu and self.can_afford(UnitTypeId.EXTRACTOR) and not self.already_pending(UnitTypeId.EXTRACTOR)):
-            lahin_geyseri = self.state.vespene_geyser.closest_to(self.start_location)
+    async def rakenna_extractoreja(self):
+        extraktorien_maara = len(self.units.of_type(UnitTypeId.EXTRACTOR))
+        liian_vahan_extractoreja = extraktorien_maara < 2
+        if (not self.state.vespene_geyser.empty and liian_vahan_extractoreja and self.can_afford(UnitTypeId.EXTRACTOR) and not self.already_pending(UnitTypeId.EXTRACTOR)):
+            valittu_geyseri = self.state.vespene_geyser.sorted_by_distance_to(self.start_location)[extraktorien_maara]
             await self.chat_send('Rakennetaan extractori!')
             rakentaja = self.workers.random
-            await self.do(rakentaja.build(UnitTypeId.EXTRACTOR, lahin_geyseri))
+            await self.do(rakentaja.build(UnitTypeId.EXTRACTOR, valittu_geyseri))
 
     async def morphaa_overlordeja(self):
         liian_vahan_overlordeja = len(self.units.of_type(UnitTypeId.OVERLORD)) < 5
