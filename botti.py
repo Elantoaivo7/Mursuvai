@@ -20,10 +20,10 @@ class Tyoskentelijat(sc2.BotAI):
             await self.build(UnitTypeId.SPAWNINGPOOL, self.start_location, max_distance=20)
 
     async def rakenna_extractoreja(self):
-        extraktorien_maara = len(self.units.of_type(UnitTypeId.EXTRACTOR))
-        liian_vahan_extractoreja = extraktorien_maara < 2
+        extractorien_maara = len(self.units.of_type(UnitTypeId.EXTRACTOR))
+        liian_vahan_extractoreja = extractorien_maara < 2
         if (not self.state.vespene_geyser.empty and liian_vahan_extractoreja and self.can_afford(UnitTypeId.EXTRACTOR) and not self.already_pending(UnitTypeId.EXTRACTOR)):
-            valittu_geyseri = self.state.vespene_geyser.sorted_by_distance_to(self.start_location)[extraktorien_maara]
+            valittu_geyseri = self.state.vespene_geyser.sorted_by_distance_to(self.start_location)[extractorien_maara]
             await self.chat_send('Rakennetaan extractori!')
             rakentaja = self.workers.random
             await self.do(rakentaja.build(UnitTypeId.EXTRACTOR, valittu_geyseri))
