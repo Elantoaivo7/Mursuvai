@@ -28,7 +28,7 @@ class Tyoskentelijat(sc2.BotAI):
             await self.do(rakentaja.build(UnitTypeId.EXTRACTOR, lahin_geyseri))
 
     async def morphaa_overlordeja(self):
-        liian_vahan_overlordeja = len(self.units.of_type(UnitTypeId.OVERLORD)) < 3
+        liian_vahan_overlordeja = len(self.units.of_type(UnitTypeId.OVERLORD)) < 5
         if (liian_vahan_overlordeja and self.can_afford(UnitTypeId.OVERLORD) and not self.already_pending(UnitTypeId.OVERLORD)):
             await self.chat_send('Morphataan overlordeja!')
             larva = self.units.of_type(UnitTypeId.LARVA).random
