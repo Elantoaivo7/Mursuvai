@@ -12,6 +12,7 @@ class Tyoskentelijat(sc2.BotAI):
         await self.rakenna_spawningpool()
         await self.rakenna_extractoreja()
         await self.morphaa_overlordeja()
+        await self.morphaa_droneja()
 
     async def rakenna_spawningpool(self):
         spawningpool_puuttuu = len(self.units.of_type(UnitTypeId.SPAWNINGPOOL)) <= 0
@@ -30,12 +31,22 @@ class Tyoskentelijat(sc2.BotAI):
 
     async def morphaa_overlordeja(self):
         liian_vahan_overlordeja = len(self.units.of_type(UnitTypeId.OVERLORD)) < 5
-        if (liian_vahan_overlordeja and self.can_afford(UnitTypeId.OVERLORD) and not self.already_pending(UnitTypeId.OVERLORD)):
+        if (self.tarpeeksi_larvoja() and liian_vahan_overlordeja and self.can_afford(UnitTypeId.OVERLORD) and not self.already_pending(UnitTypeId.OVERLORD)):
             await self.chat_send('Morphataan overlordeja!')
             larva = self.units.of_type(UnitTypeId.LARVA).random
             treenaus = larva(AbilityId.LARVATRAIN_OVERLORD)
             await self.do(treenaus)
         
+    async def morphaa_droneja(self):
+        liian_vahan_droneja = len(self.units.of_type(UnitTypeId.DRONE)) < 16
+        if (self.tarpeeksi_larvoja() and liian_vahan_droneja and self.can_afford(UnitTypeId.DRONE) and not self.already_pending(UnitTypeId.DRONE)):
+            await self.chat_send('Morphataan droneja :)!')
+            larva = self.units.of_type(UnitTypeId.LARVA).random
+            treenaus = larva(AbilityId.LARVATRAIN_DRONE)
+            await self.do(treenaus)
+
+    def tarpeeksi_larvoja(self):
+        return len(self.units.of_type(UnitTypeId.LARVA)) >= 1
 
 run_game(maps.get("Triton LE"), [
     Bot(Race.Zerg, Tyoskentelijat()),
