@@ -2,6 +2,7 @@ import sc2
 from sc2 import run_game, maps, Race, Difficulty
 from sc2.player import Bot, Computer
 from sc2.units import UnitTypeId
+from sc2.ids.ability_id import AbilityId
 
 class Tyoskentelijat(sc2.BotAI):
     async def on_step(self, iteration): 
@@ -30,8 +31,9 @@ class Tyoskentelijat(sc2.BotAI):
         liian_vahan_overlordeja = len(self.units.of_type(UnitTypeId.OVERLORD)) < 3
         if (liian_vahan_overlordeja and self.can_afford(UnitTypeId.OVERLORD) and not self.already_pending(UnitTypeId.OVERLORD)):
             await self.chat_send('Morphataan overlordeja!')
-            rakentaja = self.workers.first
-            rakentaja.train()
+            larva = self.units.of_type(UnitTypeId.LARVA).random
+            treenaus = larva(AbilityId.LARVATRAIN_OVERLORD)
+            await self.do(treenaus)
         
 
 run_game(maps.get("Triton LE"), [
